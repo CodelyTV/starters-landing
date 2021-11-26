@@ -1,29 +1,46 @@
 <template>
   <Layout>
-
-    <!-- Learn how to use images here: https://gridsome.org/docs/images -->
-    <g-image alt="Example image" src="~/favicon.png" width="135" />
-
-    <h1>Hello, world!</h1>
-
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur excepturi labore tempore expedita, et iste tenetur suscipit explicabo! Dolores, aperiam non officia eos quod asperiores
-    </p>
-
-    <p class="home-links">
-      <a href="https://gridsome.org/docs/" target="_blank" rel="noopener">Gridsome Docs</a>
-      <a href="https://github.com/gridsome/gridsome" target="_blank" rel="noopener">GitHub</a>
-    </p>
-
+    <h1>Codely Skeletons</h1>
+    <ul>
+      <li v-for="repo in repositories" :key="repo.node.name">
+        <a :href="repo.node.url">{{ repo.node.name }}</a>
+      </li>
+    </ul>
   </Layout>
 </template>
+
+<page-query>
+query {
+  github {
+    organization(login: "codelytv") {
+     repositories(first: 100) {
+       totalCount
+       edges {
+         node {
+           name
+           url
+         }
+       }
+     }
+   }
+  }
+}
+</page-query>
 
 <script>
 export default {
   metaInfo: {
-    title: 'Hello, world!'
+    title: "Hello, world!"
+  },
+  computed: {
+    repositories() {
+      return this.$page.github.organization.repositories.edges.filter(edge => {
+        console.log(edge.node.name);
+        return edge.node.name.includes("skeleton");
+      });
+    }
   }
-}
+};
 </script>
 
 <style>

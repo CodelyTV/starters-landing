@@ -3,10 +3,15 @@
   "private": true,
   "scripts": {
     "build": "gridsome build",
-    "develop": "gridsome develop",
+    "develop": "env-cmd gridsome develop",
     "explore": "gridsome explore"
   },
   "dependencies": {
-    "gridsome": "^0.7.0"
+    "@gridsome/source-graphql": "^0.1.0",
+    "gridsome": "^0.7.0",
+    "gridsome-source-github-api": "^0.2.0"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
   }
 }
