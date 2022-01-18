@@ -1,9 +1,10 @@
 <template>
   <Layout>
     <h1>Codely Skeletons</h1>
-    <ul>
-      <li v-for="repo in repositories" :key="repo.node.name">
-        <a :href="repo.node.url">{{ repo.node.name }}</a>
+    <Search v-model="search" />
+    <ul class="grid">
+      <li v-for="repo in filteredRepositories" :key="repo.node.name">
+        <Card :repo="repo.node" />
       </li>
     </ul>
   </Layout>
@@ -28,15 +29,31 @@ query {
 </page-query>
 
 <script>
+import Card from "@/components/Card";
+import Search from "@/components/Search";
+
 export default {
+  components: {
+    Card,
+    Search
+  },
+  data() {
+    return {
+      search: ""
+    };
+  },
   metaInfo: {
     title: "Hello, world!"
   },
   computed: {
     repositories() {
       return this.$page.github.organization.repositories.edges.filter(edge => {
-        console.log(edge.node.name);
         return edge.node.name.includes("skeleton");
+      });
+    },
+    filteredRepositories() {
+      return this.repositories.filter(repo => {
+        return repo.node.name.includes(this.search);
       });
     }
   }
@@ -44,7 +61,11 @@ export default {
 </script>
 
 <style>
-.home-links a {
-  margin-right: 1rem;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
 }
 </style>
